@@ -148,17 +148,14 @@ const verifyOtp = async (req, res) =>{
 const loginUser = async (req, res) => {
     try {
         
-        const {email, password, role} = req.body;
+        const {email, password,} = req.body;
         const User = await user.findOne({ where: { email } });
 
         if (!User) {
             return res.status(400).json({ error: "Email does not exist" });
         }
 
-        if (User.role !== role) {
-            return res.status(400).json({ message: "Selected role does not match with registered role" });
-        }
-
+        
         if (!User.isVerified) {
             return res.status(400).json({ message: "Please Verify Yourself First" });
         }
