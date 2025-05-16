@@ -1,23 +1,24 @@
 const { Book, book_request  } = require('../models')
 const fs = require('fs')
 const path = require('path')
+const logger = require('../utils/logger')
+
 
   // Admin is entering Books 
 const addBooks = async (req, res) => {
+  let status, response
   try{
      const {book_name, book_author } = req.body
      const file = req.file
 
      if(!file){
-      return res.status(400).json({
-        success: false,
-        msg: "PDF file is required",
-      });
+      status = 404,
+      response = {message : "Success"}
      }
      // Check for book already entered
      const  isExist = await Book.findOne({ where: { book_path : file.filename } });
      if( isExist ){
-      return res.status(400).json({
+      return res.status(200).json({
           success : false,
           msg: "Book already Entered!"
       });
@@ -34,11 +35,9 @@ const addBooks = async (req, res) => {
     });
 
   }catch (error) {
-    return res.status(400).json({
-        success : false,
-        msg: error.message
-    });
+    // logger function
   }
+  return res.status(status).json({response});
 };
 
 //Deleting books
