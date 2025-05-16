@@ -1,0 +1,2 @@
+2025-05-16T09:40:14.264Z [ERROR] : Error in getStudent API : user is not defined
+2025-05-16T10:04:35.189Z [ERROR] : Error in getStudent API : WHERE parameter "cnic" has invalid "undefined" value

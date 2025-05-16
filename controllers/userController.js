@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 require('dotenv').config()
 const mailer = require('../helpers/mailer');
 const { where } = require('sequelize');
+const logger = require('../utils/logger')
   
 //SignUp api
  const createUser = async (req, res) => {
@@ -323,6 +324,43 @@ const logOut = async (req, res) =>{
     }
 };
 
+//Api to get Student Details as a form by admin
+const getStudents = async (req, res) => {
+  let status, response
+    try{
+
+        const {cnic} = req.query;
+        logger.info(`Request Recieved for getStudent with cnic : ${cnic}`)
+
+        if(!cnic){
+            logger.warn('CNIC parameter missing in Request')
+            status = 404;
+            response = {message : "Cnic is Required"}
+        }
+
+        const students = await user.findOne({where : {cnic} });
+        
+        if (!students){
+            logger.warn(`No Student found with Given Cnic: ${cnic}`)
+            status = 404;
+            response = {message : "No Student Found"}
+            return res.status(status).json({response});
+        }
+
+        status = 200;
+        response = {message : "Found 1 Student", students}
+        logger.info(`Found 1 Student with given cnic : ${cnic}`)
+        
+    }catch(error){
+        logger.error(`Error in getStudent API : ${error.message}`)
+        return res.status(400).json({
+            success: false,
+            msg: error.message
+        });
+    }
+    return res.status(status).json({response});
+};
+
 module.exports = {
     createUser,
     loginUser,
@@ -331,5 +369,6 @@ module.exports = {
     verifyOtp,
     ForgotOtp,
     ChangePass,
-    logOut
+    logOut,
+    getStudents
 }

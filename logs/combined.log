@@ -1,0 +1,14 @@
+2025-05-16T10:03:45.687Z [INFO] : Request Recieved for getStudent with cnic : 36302-2401326-3
+2025-05-16T10:03:45.859Z [INFO] : Found 1 Student with given cnic : 36302-2401326-3
+2025-05-16T10:04:14.392Z [INFO] : Request Recieved for getStudent with cnic : 36303-2401327-3
+2025-05-16T10:04:14.540Z [INFO] : Found 1 Student with given cnic : 36303-2401327-3
+2025-05-16T10:04:21.692Z [INFO] : Request Recieved for getStudent with cnic : 36303-2401327-2
+2025-05-16T10:04:21.698Z [WARN] : No Student found with Given Cnic: 36303-2401327-2
+2025-05-16T10:04:29.136Z [INFO] : Request Recieved for getStudent with cnic : 
+2025-05-16T10:04:29.138Z [WARN] : CNIC parameter missing in Request
+2025-05-16T10:04:29.142Z [WARN] : No Student found with Given Cnic: 
+2025-05-16T10:04:35.186Z [INFO] : Request Recieved for getStudent with cnic : undefined
+2025-05-16T10:04:35.187Z [WARN] : CNIC parameter missing in Request
+2025-05-16T10:04:35.189Z [ERROR] : Error in getStudent API : WHERE parameter "cnic" has invalid "undefined" value
+2025-05-16T10:04:43.619Z [INFO] : Request Recieved for getStudent with cnic : 36303-2401327-3
+2025-05-16T10:04:43.808Z [INFO] : Found 1 Student with given cnic : 36303-2401327-3

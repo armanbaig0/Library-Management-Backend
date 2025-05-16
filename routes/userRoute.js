@@ -33,6 +33,8 @@ router.post('/ChangePass', userController.ChangePass)
 
 // Post / LogoutUser 
 router.post('/logout', userController.logOut)
+
+router.get('/get-students', userController.getStudents)
     
 
 module.exports = router
