@@ -1,4 +1,4 @@
-const { Book, book_request } = require('../models')
+const { Book, book_request, Form, FormField, user } = require('../models')
 
 // fetching all books from admin and shows to student
 const getBooks = async(req, res) =>{
@@ -116,10 +116,52 @@ const getRequestStatus = async (req, res) => {
   }
 };
 
+const getForm = async (req, res) => {
+   try {
+    const id = 2; // ya req.user.id (auth lagao)
+    
+    // 1. Get the form labels from FormField table
+    const formFields = await FormField.findAll({
+      where: { form_id: 10 },
+      attributes: ['label'],
+      raw: true
+    });
 
+    // 2. Get the student record from Users table
+    const User = await user.findByPk(id, { raw: true });
+
+    // 3. Map form labels to user fields & build response
+    const fieldsWithValues = formFields.map(({ label }) => {
+      // Example mapping (label to user column):
+      // You might want to define a proper mapping here
+      const mapping = {
+      'fullname': 'fullname',      // label in FormField is 'fullname', user table column is 'name'
+      'email': 'email',
+      'phone no': 'phone_no',
+      'address': 'address',
+      'cnic': 'cnic',
+      'reg no': 'reg_no'
+};
+
+
+      const userField = mapping[label];
+
+      return {
+        label,
+        value: userField && User && User[userField] ? User[userField] : 'N/A'
+      };
+    });
+
+    res.status(200).json({ fields: fieldsWithValues });
+  } catch (error) {
+    console.error('Error loading form with values:', error);
+    res.status(500).json({ message: 'Failed to load form data.' });
+  }
+};
 
 module.exports = {
     getBooks,
     reqBooks,
     getRequestStatus,
+    getForm
 }

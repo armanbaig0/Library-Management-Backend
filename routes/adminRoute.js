@@ -24,4 +24,6 @@ router.get('/get-req', adminController.getRequest)
 router.delete('/del-book', adminController.delBooks)
 
 router.post("/handle-request", adminController.handleRequest)
+
+router.post("/make-Form", adminController.makeForm)
 module.exports = router

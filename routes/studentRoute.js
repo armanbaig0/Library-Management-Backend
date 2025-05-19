@@ -8,5 +8,6 @@ router.post('/req-book', studentController.reqBooks)
 
 router.get('/request-status', studentController.getRequestStatus)
 
+router.get('/get-Form', studentController.getForm)
 
 module.exports = router

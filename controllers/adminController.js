@@ -1,4 +1,4 @@
-const { Book, book_request  } = require('../models')
+const { Book, book_request, Form, FormField  } = require('../models')
 const fs = require('fs')
 const path = require('path')
 const logger = require('../utils/logger')
@@ -166,9 +166,32 @@ const handleRequest = async (req, res) => {
   }
 };
 
+const makeForm = async (req, res) => {
+    try {
+    const { label, fields } = req.body;
+
+    // Create form entry
+    const form = await Form.create({ label });
+
+    // Create form fields with form_id FK
+    const formFieldsData = fields.map(field => ({
+      label: field.label,
+      form_id: form.id
+    }));
+
+    await FormField.bulkCreate(formFieldsData);
+
+    res.status(201).json({ message: 'Form and fields saved successfully', formId: form.id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to save form' });
+  }
+};
+
 module.exports = {
     addBooks,
     getRequest,
     delBooks,
-    handleRequest
+    handleRequest,
+    makeForm
 }

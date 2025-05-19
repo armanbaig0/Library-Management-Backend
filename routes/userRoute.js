@@ -34,6 +34,7 @@ router.post('/ChangePass', userController.ChangePass)
 // Post / LogoutUser 
 router.post('/logout', userController.logOut)
 
+//Get / getting all data of students to display as in a form.. 
 router.get('/get-students', userController.getStudents)
     
 
