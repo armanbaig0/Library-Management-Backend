@@ -116,39 +116,42 @@ const getRequestStatus = async (req, res) => {
   }
 };
 
+//Api to get Forms
 const getForm = async (req, res) => {
-   try {
-    const id = 2; // ya req.user.id (auth lagao)
-    
-    // 1. Get the form labels from FormField table
-    const formFields = await FormField.findAll({
-      where: { form_id: 10 },
-      attributes: ['label'],
-      raw: true
+  try {
+    const id = 2; // Replace with req.user.id from JWT in production
+
+    // Step 1: Get the latest form (ordered by createdAt)
+    const latestForm = await Form.findOne({
+      order: [['createdAt', 'DESC']],
+      raw: true,
     });
 
-    // 2. Get the student record from Users table
+    if (!latestForm) {
+      return res.status(404).json({ message: 'No form found.' });
+    }
+
+    const selectedFields = latestForm.selectedFields; // Already an array
+
+    // Step 2: Get user data
     const User = await user.findByPk(id, { raw: true });
 
-    // 3. Map form labels to user fields & build response
-    const fieldsWithValues = formFields.map(({ label }) => {
-      // Example mapping (label to user column):
-      // You might want to define a proper mapping here
-      const mapping = {
-      'fullname': 'fullname',      // label in FormField is 'fullname', user table column is 'name'
+    // Step 3: Define mapping from form labels to DB field names
+    const mapping = {
+      'fullname': 'fullname',
       'email': 'email',
       'phone no': 'phone_no',
       'address': 'address',
       'cnic': 'cnic',
-      'reg no': 'reg_no'
-};
+      'reg no': 'reg_no',
+    };
 
-
-      const userField = mapping[label];
-
+    // Step 4: Build response with values
+    const fieldsWithValues = selectedFields.map((label) => {
+      const userField = mapping[label.toLowerCase()];
       return {
         label,
-        value: userField && User && User[userField] ? User[userField] : 'N/A'
+        value: userField && User && User[userField] ? User[userField] : 'N/A',
       };
     });
 

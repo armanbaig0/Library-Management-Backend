@@ -165,28 +165,24 @@ const handleRequest = async (req, res) => {
     });
   }
 };
-
+// Admin is making form
 const makeForm = async (req, res) => {
-    try {
-    const { label, fields } = req.body;
+  try {
+    const { label, selectedFields } = req.body;
 
-    // Create form entry
-    const form = await Form.create({ label });
+    // Create form entry with JSONB array
+    const form = await Form.create({ label, selectedFields });
 
-    // Create form fields with form_id FK
-    const formFieldsData = fields.map(field => ({
-      label: field.label,
-      form_id: form.id
-    }));
-
-    await FormField.bulkCreate(formFieldsData);
-
-    res.status(201).json({ message: 'Form and fields saved successfully', formId: form.id });
+    res.status(201).json({
+      message: 'Form saved successfully',
+      formId: form.id
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to save form' });
   }
 };
+
 
 module.exports = {
     addBooks,

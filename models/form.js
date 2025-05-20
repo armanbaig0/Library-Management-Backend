@@ -3,14 +3,17 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Form extends Model {
     static associate(models) {
-      // One Form has many FormFields
-      Form.hasMany(models.FormField, { foreignKey: 'form_id', as: 'fields' });
     }
   }
   Form.init({
     label: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    selectedFields: {
+      type: DataTypes.JSONB, // ✅ PostgreSQL-specific
+      allowNull: true,       // can be empty initially
+      defaultValue: []
     }
   }, {
     sequelize,

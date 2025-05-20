@@ -173,6 +173,7 @@ const loginUser = async (req, res) => {
                   fullname : User.fullname,
                   email: User.Email, 
                   role: User.role,
+                  cnic: User.cnic,
                     }, // payload
                 process.env.SECRET_KEY,                       // SECRET_KEY
                 { expiresIn: '1h' }               // token expiry
@@ -186,8 +187,8 @@ const loginUser = async (req, res) => {
             user: {
                 id: User.id,
                 fullname: User.fullname,
-                email: User.email
-
+                email: User.email,
+                cnic : User.cnic
             }
         });
 
