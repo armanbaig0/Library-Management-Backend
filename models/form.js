@@ -3,6 +3,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Form extends Model {
     static associate(models) {
+      Form.hasMany(models.StudentForm, {
+      foreignKey: 'formId',
+      as: 'formSubmissions'
+});
     }
   }
   Form.init({

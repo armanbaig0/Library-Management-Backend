@@ -10,4 +10,6 @@ router.get('/request-status', studentController.getRequestStatus)
 
 router.get('/get-Form', studentController.getForm)
 
+router.post('/submit-Form', studentController.submitForm)
+
 module.exports = router

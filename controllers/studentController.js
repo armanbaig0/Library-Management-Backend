@@ -1,4 +1,4 @@
-const { Book, book_request, Form, FormField, user } = require('../models')
+const { Book, book_request, Form, StudentForm, user } = require('../models')
 
 // fetching all books from admin and shows to student
 const getBooks = async(req, res) =>{
@@ -162,9 +162,70 @@ const getForm = async (req, res) => {
   }
 };
 
+//Api to submit form 
+
+const submitForm = async (req, res) => {
+  try {
+    let {
+      formId,
+      fullName,
+      regNo,
+      phoneNo,
+      address,
+      email,
+      cnic
+    } = req.body;
+
+    // Get studentId from cookies (userId key)
+    const studentId = req.cookies.userId;  // assuming cookie name is userId
+
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID not found in cookies" });
+    }
+
+    if (!formId) {
+      const latestForm = await Form.findOne({ order: [['createdAt', 'DESC']] });
+      formId = latestForm?.id;
+      if (!formId) {
+        return res.status(400).json({ message: "Form not found" });
+      }
+    }
+
+    const foundUser = await user.findByPk(studentId);
+    if (!foundUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    fullName = fullName || foundUser.fullname || "N/A";
+    email = email || foundUser.email || "N/A";
+    cnic = cnic || foundUser.cnic || "N/A";
+    regNo = regNo || "N/A";
+    phoneNo = phoneNo || "N/A";
+    address = address || "N/A";
+
+    const studentForm = await StudentForm.create({
+      formId,
+      studentId,
+      fullName,
+      regNo,
+      phoneNo,
+      address,
+      email,
+      cnic
+    });
+
+    res.status(201).json({ message: "Form submitted successfully", studentForm });
+
+  } catch (err) {
+    console.error("Form submission error:", err);
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
+  }
+};
+
 module.exports = {
     getBooks,
     reqBooks,
     getRequestStatus,
-    getForm
+    getForm,
+    submitForm
 }

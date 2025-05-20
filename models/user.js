@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      user.hasMany(models.StudentForm, {
+      foreignKey: 'studentId',
+      as: 'studentForms'
+});
+
     }
     // this below function decides which fields needs to show to user each time when we return a user in api response
     toJSON(){
