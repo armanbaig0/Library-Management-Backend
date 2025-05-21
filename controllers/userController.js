@@ -9,13 +9,13 @@ const logger = require('../utils/logger')
 //SignUp api
  const createUser = async (req, res) => {
     try {
-        const { fullname, email, password, } = req.body
+        const { fullname, cnic, email, password, } = req.body
         // Check for Email already registered
-        const  isExist = await user.findOne({ where: { email } });
+        const  isExist = await user.findOne({ where: { email, cnic } });
            if( isExist ){
             return res.status(400).json({
                 success : false,
-                msg: "Email Already Exists!"
+                msg: "Email or Cnic Already Exists!"
             });
            }
         // hash the passsword
@@ -23,6 +23,7 @@ const logger = require('../utils/logger')
 
         const newUser = await user.create({
             fullname,
+            cnic,
             email,
             password: hashed,
             role : "Student",
