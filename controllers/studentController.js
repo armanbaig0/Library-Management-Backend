@@ -119,7 +119,11 @@ const getRequestStatus = async (req, res) => {
 //Api to get Forms
 const getForm = async (req, res) => {
   try {
-    const id = 2; // Replace with req.user.id from JWT in production
+    const id = req.cookies.userId; // Replace with req.user.id from JWT in production
+
+    if (!id) {
+      return res.status(401).json({ message: "Unauthorized: User ID missing" });
+    }
 
     // Step 1: Get the latest form (ordered by createdAt)
     const latestForm = await Form.findOne({
