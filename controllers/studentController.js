@@ -90,9 +90,10 @@ const getRequestStatus = async (req, res) => {
     });
 
     if (requests.length === 0) {
-      return res.status(404).json({
-        success: false,
-        msg: "No requests found for this student"
+      return res.status(200).json({
+        success: true,
+        msg: "No requests found",
+        requests: []
       });
     }
 
