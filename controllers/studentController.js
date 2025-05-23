@@ -145,10 +145,10 @@ const getForm = async (req, res) => {
     const mapping = {
       'fullname': 'fullname',
       'email': 'email',
-      'phone no': 'phone_no',
+      'phoneno': 'phoneno',
       'address': 'address',
       'cnic': 'cnic',
-      'reg no': 'reg_no',
+      'regno': 'regno',
     };
 
     // Step 4: Build response with values

@@ -61,6 +61,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
+    regno: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phoneno: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    
   }, {
     sequelize,
     tableName: 'users',
