@@ -63,15 +63,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     regno: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     phoneno: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     
   }, {

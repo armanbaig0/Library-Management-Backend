@@ -46,8 +46,12 @@ const getInfo = async (req, res) => {
     const readonlyFields = {};
     const editableFields = {};
 
+    // List of fields to exclude
+    const excludedFields = ['id', 'uuid', 'otp', 'isVerified', 'otpExpires', 'password', 'role', 'createdAt', 'updatedAt'];
+
     for (const [key, value] of Object.entries(User.dataValues || {})) {
-      if (key === 'UserId') continue;
+      if (excludedFields.includes(key)) continue;
+
       if (value) {
         readonlyFields[key] = value;
       } else {
@@ -66,6 +70,7 @@ const getInfo = async (req, res) => {
     return res.status(400).json({ success: false, msg: error.message });
   }
 };
+
 
 
 //Student Adding their Information
