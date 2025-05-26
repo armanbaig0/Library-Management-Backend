@@ -28,6 +28,106 @@ const getBooks = async(req, res) =>{
     }
 };
 
+//Student getting thier Information
+const getInfo = async (req, res) =>{
+   const { userId, role } = req.cookies;
+
+  if (!userId || role !== 'Student') {
+    return res.status(401).json({
+      success: false,
+      msg: 'Unauthorized access'
+    });
+  }
+
+  try {
+    const User = await user.findByPk(userId);
+
+    if (!User) {
+      return res.status(404).json({
+        success: false,
+        msg: 'Student not found'
+      });
+    }
+
+    const readonlyFields = {};
+    const editableFields = {};
+
+    for (const [key, value] of Object.entries(user.dataValues)) {
+      if (key === 'UserId') continue;
+      if (value) {
+        readonlyFields[key] = value;
+      } else {
+        editableFields[key] = '';
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: 'Student data retrieved successfully',
+      readonlyFields,
+      editableFields
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
+//Student Adding their Information
+const addInfo = async(req, res) =>{
+  const { userId, role } = req.cookies;
+
+  if (!userId || role !== 'Student') {
+    return res.status(401).json({
+      success: false,
+      msg: 'Unauthorized access'
+    });
+  }
+
+  try {
+    const User = await user.findByPk(userId);
+
+    if (!User) {
+      return res.status(404).json({
+        success: false,
+        msg: 'Student not found'
+      });
+    }
+
+    const updates = {};
+
+    for (const [key, value] of Object.entries(req.body)) {
+      if (user[key] === null || user[key] === '') {
+        updates[key] = value;
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        msg: 'No missing fields to update or all fields already filled'
+      });
+    }
+
+    await user.update(updates);
+
+    return res.status(200).json({
+      success: true,
+      msg: 'Missing fields updated successfully',
+      updatedFields: updates
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
 //Student make Request for Books 
 const reqBooks = async(req, res) => {
   try {
@@ -232,5 +332,7 @@ module.exports = {
     reqBooks,
     getRequestStatus,
     getForm,
-    submitForm
+    submitForm,
+    addInfo,
+    getInfo
 }
