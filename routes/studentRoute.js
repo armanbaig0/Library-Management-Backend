@@ -14,6 +14,6 @@ router.post('/submit-Form', studentController.submitForm)
 
 router.post('/add-Info', studentController.addInfo)
 
-router.post('/get-Info', studentController.getInfo)
+router.get('/get-Info', studentController.getInfo)
 
 module.exports = router

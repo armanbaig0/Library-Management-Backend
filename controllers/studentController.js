@@ -29,30 +29,24 @@ const getBooks = async(req, res) =>{
 };
 
 //Student getting thier Information
-const getInfo = async (req, res) =>{
-   const { userId, role } = req.cookies;
+const getInfo = async (req, res) => {
+  const { userId, role } = req.cookies;
 
   if (!userId || role !== 'Student') {
-    return res.status(401).json({
-      success: false,
-      msg: 'Unauthorized access'
-    });
+    return res.status(401).json({ success: false, msg: 'Unauthorized access' });
   }
 
   try {
     const User = await user.findByPk(userId);
 
     if (!User) {
-      return res.status(404).json({
-        success: false,
-        msg: 'Student not found'
-      });
+      return res.status(404).json({ success: false, msg: 'Student not found' });
     }
 
     const readonlyFields = {};
     const editableFields = {};
 
-    for (const [key, value] of Object.entries(user.dataValues)) {
+    for (const [key, value] of Object.entries(User.dataValues || {})) {
       if (key === 'UserId') continue;
       if (value) {
         readonlyFields[key] = value;
@@ -69,38 +63,30 @@ const getInfo = async (req, res) =>{
     });
 
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      msg: error.message
-    });
+    return res.status(400).json({ success: false, msg: error.message });
   }
 };
 
+
 //Student Adding their Information
-const addInfo = async(req, res) =>{
+const addInfo = async (req, res) => {
   const { userId, role } = req.cookies;
 
   if (!userId || role !== 'Student') {
-    return res.status(401).json({
-      success: false,
-      msg: 'Unauthorized access'
-    });
+    return res.status(401).json({ success: false, msg: 'Unauthorized access' });
   }
 
   try {
     const User = await user.findByPk(userId);
 
     if (!User) {
-      return res.status(404).json({
-        success: false,
-        msg: 'Student not found'
-      });
+      return res.status(404).json({ success: false, msg: 'Student not found' });
     }
 
     const updates = {};
 
     for (const [key, value] of Object.entries(req.body)) {
-      if (user[key] === null || user[key] === '') {
+      if (User[key] === null || User[key] === '') {
         updates[key] = value;
       }
     }
@@ -112,7 +98,7 @@ const addInfo = async(req, res) =>{
       });
     }
 
-    await user.update(updates);
+    await User.update(updates);
 
     return res.status(200).json({
       success: true,
@@ -121,12 +107,10 @@ const addInfo = async(req, res) =>{
     });
 
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      msg: error.message
-    });
+    return res.status(400).json({ success: false, msg: error.message });
   }
 };
+
 
 //Student make Request for Books 
 const reqBooks = async(req, res) => {
