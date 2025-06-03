@@ -1,6 +1,6 @@
 const { user } = require('../models')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs');
 require('dotenv').config()
 const mailer = require('../helpers/mailer');
 const { where } = require('sequelize');
