@@ -14,10 +14,7 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
-    "password": "1234",
-    "database": "forms_db_prod",
-    "host": "your-postgresql-host-url",
+    "use_env_variable": "DATABASE_URL",
     "dialect": "postgres"
   }
 }
