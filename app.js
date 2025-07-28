@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use('/files', express.static(path.join(__dirname, 'public/files')));
 app.use(cors({
-    origin : "http://localhost:3000",
+    origin : "https://library-management-front-end-tau.vercel.app",
     methods : ["GET", "POST", "PUT", "DELETE"],
     credentials : true
 }));
@@ -25,6 +25,15 @@ app.use('/student', studentRoute);
 // start server
 app.listen({ port: 5000 }, async () => {
     console.log("Server is running on port : 5000");
-    await sequelize.authenticate()
-    console.log("Database Connected!");
+    
+    try {
+        await sequelize.authenticate();
+        console.log("Database Connected!");
+
+        // 🔥 Add this line to sync models/tables with Render-hosted DB
+        await sequelize.sync({ alter: true }); // 👈 this line creates/updates tables
+        console.log("Tables synced successfully.");
+    } catch (err) {
+        console.error("DB connection failed:", err);
+    }
 });
